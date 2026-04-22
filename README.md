@@ -5,6 +5,51 @@ Full-stack currency conversion platform with:
 - Frontend: React + TypeScript (Vite)
 - External rate provider: Frankfurter API
 
+## Setup Instructions
+
+## Prerequisites
+- .NET SDK 10.0.x
+- Node.js 20+
+- npm 10+
+
+## Run Backend
+1. From repository root:
+   - `dotnet build CurrencyConverterPlatform.slnx`
+2. Run API:
+  - `dotnet run --project api/src/CurrencyConverter.Api/CurrencyConverter.Api.csproj`
+
+By default the API uses `http://localhost:5050` (check launch profile output).
+
+## Run Frontend
+1. `cd client`
+2. Install dependencies:
+   - `npm install`
+3. Start dev server:
+   - `npm run dev`
+
+## Testing
+
+## Backend
+- Run all tests:
+  - `dotnet test CurrencyConverterPlatform.slnx`
+
+## Frontend
+- Run tests:
+  - `cd client`
+  - `npm run test`
+
+## API Versioning
+Routes are versioned with URL segment (`/api/v1/...`).
+
+## Multi-environment Support
+- `appsettings.json`
+- `appsettings.Development.json`
+- `appsettings.Test.json`
+- `appsettings.Production.json`
+Some configuration values can be moved from appsettings files to Docker environment variables in future.
+
+Environment can be selected via `ASPNETCORE_ENVIRONMENT`.
+
 ## Architecture Overview
 
 ## Backend (Clean layered design)
@@ -22,9 +67,6 @@ Full-stack currency conversion platform with:
 - `GET /api/v1/rates/convert?amount=100&fromCurrency=EUR&toCurrency=USD`
 - `GET /api/v1/rates/historical?baseCurrency=EUR&startDate=2020-01-01&endDate=2020-01-31&page=1&pageSize=20`
 - `POST /api/v1/auth/token` (dev/test token bootstrap)
-
-### Business Rule
-The conversion endpoint rejects TRY, PLN, THB, MXN for source/target with HTTP 400 and a clear message.
 
 ### Resilience and Performance
 - In-memory caching for latest and historical rates
@@ -56,7 +98,6 @@ The conversion endpoint rejects TRY, PLN, THB, MXN for source/target with HTTP 4
   - Correlation ID
 - Correlation ID is propagated to outbound Frankfurter API calls via `X-Correlation-ID`.
 
-
 ## Frontend
 - React + TypeScript + React Query
 - Main features:
@@ -70,55 +111,9 @@ The conversion endpoint rejects TRY, PLN, THB, MXN for source/target with HTTP 4
   - Responsive layout
 
 ## Project Structure
-- `backend/src` - API and backend libraries
-- `backend/tests` - unit and integration tests
-- `frontend` - React application
-
-## Setup Instructions
-
-## Prerequisites
-- .NET SDK 10.0.x
-- Node.js 20+
-- npm 10+
-
-## Run Backend
-1. From repository root:
-   - `dotnet restore CurrencyConverterPlatform.slnx`
-   - `dotnet build CurrencyConverterPlatform.slnx`
-2. Run API:
-   - `dotnet run --project backend/src/CurrencyConverter.Api/CurrencyConverter.Api.csproj`
-
-By default the API uses `http://localhost:5050` (check launch profile output).
-
-## Run Frontend
-1. `cd frontend`
-2. Install dependencies:
-   - `npm install`
-3. Start dev server:
-   - `npm run dev`
-
-## Testing
-
-## Backend
-- Run all tests with coverage collector:
-  - `dotnet test CurrencyConverterPlatform.slnx`
-
-## Frontend
-- Run tests:
-  - `cd frontend`
-  - `npm run test`
-
-## API Versioning
-Routes are versioned with URL segment (`/api/v1/...`).
-
-## Multi-environment Support
-- `appsettings.json`
-- `appsettings.Development.json`
-- `appsettings.Test.json`
-- `appsettings.Production.json`
-P.S some of the configurations can be moved to docker env config in future
-
-Environment can be selected via `ASPNETCORE_ENVIRONMENT`.
+- `api/src` - API and backend libraries
+- `api/tests` - unit and integration tests
+- `client` - React application
 
 ## Horizontal Scalability Notes
 - API is stateless
@@ -171,4 +166,6 @@ What was not accepted blindly from AI:
 2. Add OpenTelemetry traces/metrics and dashboard integration.
 3. Add stronger input validation with FluentValidation.
 4. Add richer integration tests with mocked upstream server and outage simulations.
-5. Add containerization (`Dockerfile`, `docker-compose`) and CI workflow files.
+5. Improve authentication by integrating a third-party identity provider or running a custom OAuth server using Duende IdentityServer.
+6. Add containerization (`Dockerfile`, `docker-compose`) and CI workflow files.
+7. Move selected configuration values from appsettings files to Docker environment variables for deployment flexibility.
