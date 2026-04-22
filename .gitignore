@@ -1,0 +1,20 @@
+# .NET
+**/bin/
+**/obj/
+*.user
+*.suo
+
+# Test artifacts
+**/TestResults/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Env
+frontend/.env
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
